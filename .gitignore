@@ -1,0 +1,17 @@
+# Entorno virtual local
+venv/
+
+# Cache de Python
+__pycache__/
+*.py[cod]
+
+# Base de datos generada en ejecucion
+iot_data.db
+
+# Configuracion local de Pymakr
+pymakr.conf
+
+# Archivos de sistema/edicion opcionales
+.vscode/
+.DS_Store
+Thumbs.db

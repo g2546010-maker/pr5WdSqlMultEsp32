@@ -2,8 +2,13 @@ from fastapi import FastAPI, WebSocket
 from fastapi.responses import FileResponse
 import socket, threading, struct, asyncio, json, sqlite3
 from datetime import datetime
+from pathlib import Path
 
 app = FastAPI()
+
+# Rutas base robustas para no depender del directorio de ejecucion.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+WEB_INDEX_PATH = PROJECT_ROOT / "app_web" / "index.html"
 
 connections = []
 connection_locks = {}
@@ -11,7 +16,7 @@ main_loop = None
 
 # MODIFICACION PERSISTENCIA (SQLITE):
 # Nombre de la base de datos SQLite que guardara el historial de sensores.
-DB_NAME = "iot_data.db"
+DB_NAME = str(PROJECT_ROOT / "iot_data.db")
 
 # MODIFICACION PERSISTENCIA (SQLITE):
 # Lock para evitar acceso concurrente a la BD desde el thread multicast y las rutas FastAPI.
@@ -198,7 +203,7 @@ threading.Thread(target=multicast, daemon=True).start()
 
 @app.get("/")
 async def root():
-    return FileResponse("index.html")
+    return FileResponse(str(WEB_INDEX_PATH))
 
 
 @app.get("/history/{device_id}")
